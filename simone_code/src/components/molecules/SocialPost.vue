@@ -8,6 +8,7 @@
             <img class="avatar" :src="avatarSrc" />
             <div class="name">{{ username }}</div>
             <div class="userId">{{ userId }}</div>
+            <IconDelete @click="onDeleteClick" />
         </div>
         <div class="post">{{ post }}</div>
         <button v-show="hasComments" @click = "onShowCommentClick">Show Comments</button>
@@ -21,6 +22,7 @@
 <script setup>
     import { onMounted, ref, computed } from 'vue';
     import SocialPostComments from './SocialPostComments.vue';
+    import IconDelete from '../icons/IconDelete.vue';
     
     const props = defineProps({
         username: String,
@@ -50,6 +52,11 @@
       const comments = props.comments.length;
       return comments + props.likes + props.retweets;
     });
+
+    const emit = defineEmits(['delete']);
+    const onDeleteClick = () => {
+      emit('delete');
+    }
 
     onMounted( () => console.log( props.username) );
 </script>

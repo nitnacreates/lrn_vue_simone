@@ -4,7 +4,6 @@
 </script>
 
 <template>
-  <TheHeader />
   <RouterView />
 </template>
 
