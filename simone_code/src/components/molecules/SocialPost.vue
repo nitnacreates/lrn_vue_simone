@@ -2,7 +2,7 @@
     <div 
         class="SocialPost"
         :class="{SocialPost__selected:selected}"
-        @click="selected = !selected"
+        @click="onSelectedClick"
     >
         <div class="header">
             <img class="avatar" :src="avatarSrc" />
@@ -10,24 +10,45 @@
             <div class="userId">{{ userId }}</div>
         </div>
         <div class="post">{{ post }}</div>
-        <button v-show="comments.length > 0" @click = "showComments = !showComments">Show Comments</button>
+        <button v-show="hasComments" @click = "onShowCommentClick">Show Comments</button>
         <SocialPostComments 
           v-if="showComments"
           :comments="comments">
         </SocialPostComments>
+        <div class="interactions">Interactions: {{ interactions }}</div>
     </div>
 </template>
 <script setup>
-    import { onMounted, ref } from 'vue';
+    import { onMounted, ref, computed } from 'vue';
     import SocialPostComments from './SocialPostComments.vue';
-    const selected = ref(false);
-    const showComments = ref(false);
+    
     const props = defineProps({
         username: String,
         userId: Number,
         avatarSrc: String,
         post: String,
-        comments: Array
+        comments: Array,
+        likes: Number,
+        retweets: Number
+    });
+
+    const selected = ref(false);
+    const onSelectedClick = () => {
+      selected.value = !selected.value;
+    };
+
+    const showComments = ref(false);
+    const onShowCommentClick = () => {
+      showComments.value = !showComments.value;
+    }
+
+    const hasComments = computed( () => {
+      return props.comments.length > 0;
+    });
+
+    const interactions = computed( () => {
+      const comments = props.comments.length;
+      return comments + props.likes + props.retweets;
     });
 
     onMounted( () => console.log( props.username) );
@@ -50,6 +71,10 @@
     font-weight: bold;
     margin-right: 8px;
     color: white;
+  }
+  .interactions {
+    font-weight: bold;
+    margin-top: 8px;
   }
 }
 </style>
