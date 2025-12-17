@@ -2,66 +2,63 @@
     <div 
         class="SocialPost"
         :class="{SocialPost__selected:selected}"
-        @click="onSelectedClick"
     >
         <div class="header">
             <img class="avatar" :src="avatarSrc" />
             <div class="name">{{ username }}</div>
-            <div class="userId">{{ userId }}</div>
             <IconDelete @click="onDeleteClick" />
         </div>
         <div class="post">{{ post }}</div>
-        <button v-show="hasComments" @click = "onShowCommentClick">Show Comments</button>
-        <SocialPostComments 
-          v-if="showComments"
-          :comments="comments">
-        </SocialPostComments>
-        <div class="interactions">Interactions: {{ interactions }}</div>
+        <Suspense v-if="showComments" >
+          <SocialPostComments :postId="id" @delete="onDeleted"></SocialPostComments>
+          <template #fallback>fetching comments...</template>
+        </Suspense>
+        <div class="interactions">
+          <IconHeart/>
+          <IconCommunity/>
+          {{  likes }}
+          <TheButton
+            @click="onShowCommentClick"
+            value="Show comment"
+            width="auto"
+            theme="dark"
+          />
+
+        </div>
     </div>
 </template>
 <script setup>
-    import { onMounted, ref, computed } from 'vue';
-    import SocialPostComments from './SocialPostComments.vue';
-    import IconDelete from '../icons/IconDelete.vue';
+import { onMounted, ref, computed } from 'vue';
+import SocialPostComments from './SocialPostComments.vue';
+import IconDelete from '../icons/IconDelete.vue';
+import IconHeart from '../icons/IconHeart.vue';
+import IconCommunity from '../icons/IconCommunity.vue';
+import TheButton from '../atoms/TheButton.vue';
     
-    const props = defineProps({
-        username: String,
-        userId: Number,
-        avatarSrc: String,
-        post: String,
-        comments: Array,
-        likes: Number,
-        retweets: Number
-    });
+const props = defineProps({
+    username: String,
+    id: Number,
+    avatarSrc: String,
+    post: String,
+    likes: Number,
+    postId: String
+});
 
-    const selected = ref(false);
-    const onSelectedClick = () => {
-      selected.value = !selected.value;
-    };
+const showComments = ref(false);
+const onShowCommentClick = () => {
+  showComments.value = !showComments.value;
+}
 
-    const showComments = ref(false);
-    const onShowCommentClick = () => {
-      showComments.value = !showComments.value;
-    }
 
-    const hasComments = computed( () => {
-      return props.comments.length > 0;
-    });
+const emit = defineEmits(['delete']);
+const onDeleteClick = () => {
+  emit('delete');
+}
 
-    const interactions = computed( () => {
-      const comments = props.comments.length;
-      return comments + props.likes + props.retweets;
-    });
-
-    const emit = defineEmits(['delete']);
-    const onDeleteClick = () => {
-      emit('delete');
-    }
-
-    onMounted( () => console.log( props.username) );
 </script>
 <style lang="scss">
 .SocialPost{
+  margin-bottom:16px;
   &__selected{
     border: white solid 1px;
   }
@@ -72,6 +69,8 @@
   }
   .avatar {
     border-radius: 50%;
+    width: 40px;
+    height: 40px;;
     margin-right: 12px;
   }
   .name {
@@ -80,8 +79,16 @@
     color: white;
   }
   .interactions {
+    display: flex;
     font-weight: bold;
     margin-top: 8px;
+    gap:8px;
+  }
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: var(--color-input-soft);
+    cursor:pointer;
   }
 }
 </style>
