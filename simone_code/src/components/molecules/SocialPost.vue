@@ -4,7 +4,7 @@
         :class="{SocialPost__selected:selected}"
     >
         <div class="header">
-            <img class="avatar" :src="avatarSrc" />
+            <img class="avatar" :src="avatarSrc" @click="navigateToUser" />
             <div class="name">{{ username }}</div>
             <IconDelete @click="onDeleteClick" />
         </div>
@@ -28,7 +28,9 @@
     </div>
 </template>
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 import SocialPostComments from './SocialPostComments.vue';
 import IconDelete from '../icons/IconDelete.vue';
 import IconHeart from '../icons/IconHeart.vue';
@@ -49,10 +51,19 @@ const onShowCommentClick = () => {
   showComments.value = !showComments.value;
 }
 
-
 const emit = defineEmits(['delete']);
 const onDeleteClick = () => {
   emit('delete');
+}
+
+const router = useRouter();
+const navigateToUser = () => {
+  router.push({
+    name: "user",
+    params: {
+      userId: props.id
+    }
+  });
 }
 
 </script>
