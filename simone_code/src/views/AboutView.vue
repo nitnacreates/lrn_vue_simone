@@ -1,8 +1,16 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-  </div>
+  <StaticTemplate>
+    <template #heading>About Page</template>
+    <template #default>
+      This is my content of my about page
+    </template>
+  </StaticTemplate>
 </template>
+
+<script setup>
+import StaticTemplate from '@/components/templates/StaticTemplate.vue';
+</script>
+
 
 <style>
 @media (min-width: 1024px) {

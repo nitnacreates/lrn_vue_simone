@@ -1,12 +1,10 @@
 <template>
-    <button :class="theme"> {{ value }}</button>
+    <button :class="theme">
+        <slot>Click me</slot>
+    </button>
 </template>
 <script setup>
 defineProps({
-    value: {
-        type: [String, Number],
-        required: true
-    },
     width: {
         type: String,
         default: "100px"
