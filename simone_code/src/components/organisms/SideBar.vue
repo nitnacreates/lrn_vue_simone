@@ -1,11 +1,11 @@
 <template>
-    <aside :class="{ 'sidebar__closed': closed}">
-        <template v-if="closed">
-            <IconRightArrow class="sidebar__icon" @click="toggleSidebar" />
+    <aside :class="{ 'sidebar__closed': sidebarStore.closed}">
+        <template v-if="sidebarStore.closed">
+            <IconRightArrow class="sidebar__icon" @click="sidebarStore.toggleSidebar" />
         </template>
         <template v-else>
             <h2>Sidebar</h2>
-            <IconLeftArrow class="sidebar__icon" @click="toggleSidebar" />
+            <IconLeftArrow class="sidebar__icon" @click="sidebarStore.toggleSidebar" />
             <button>Create Post</button>
             <div>Current time: {{ currentTime }}</div>
             <TheButton @click="onUpdateTimeClick">Update Time</TheButton>
@@ -21,20 +21,17 @@ import { RouterLink, useRouter } from 'vue-router';
 import TheButton from '../atoms/TheButton.vue';
 import IconLeftArrow from '../icons/IconLeftArrow.vue';
 import IconRightArrow from '../icons/IconRightArrow.vue';
+import { useSidebarStore } from '@/stores/sidebar';
 
 const currentTime = ref(new Date().toLocaleTimeString());
 const onUpdateTimeClick = () => {
     currentTime.value = new Date().toLocaleDateString();
 };
 
-const closed = ref(false);
-const toggleSidebar = () => {
-    closed.value = !closed.value;
-    window.localStorage.setItem("sidebar", closed.value);
-}
+const sidebarStore = useSidebarStore();
+
 onBeforeMount( async () => {
-    const sidebarState = window.localStorage.getItem("sidebar");
-    closed.value = sidebarState === "true";
+    sidebarStore.loadSidebarFromLocalStorage();
 });
 
 const router = useRouter();

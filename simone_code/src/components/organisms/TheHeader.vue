@@ -2,16 +2,22 @@
     <header>
         <TheLogo />
         <h1>Companion app</h1>
-        <a href="#">
-            Welcome 
-            <span v-text="username"></span>
-        </a>
+        <span>
+            <a href="#">
+                Welcome <span v-text="username"></span>
+            </a>
+            <IconSettings class="icon" />
+            <IconFullScreen class="icon" @click="sidebarStore.toggleSidebar" />
+            <p>Sidebar state: {{ sidebarStore.friendlyState }}</p>
+        </span>
     </header>
 </template>
 <script setup>
     import { ref } from 'vue';
     import TheLogo from '../atoms/TheLogo.vue';
+    import { useSidebarStore } from '@/stores/sidebar';
     const username = ref("Zelig880");
+    const sidebarStore = useSidebarStore();
 </script>
 <style lang="scss">
 header {

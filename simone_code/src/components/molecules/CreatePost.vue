@@ -1,26 +1,30 @@
 <template>
-    <form ref="createPostForm" @submit="createPost">
+    <form ref="createPostForm" @submit="createPostHandler">
         <h2>Create a Post</h2>
         <textarea rows="4" cols="20" ref="textareaRef" required="true" minlength="10"></textarea>
         <TheButton>Create Post</TheButton>
     </form>
 </template>
 <script>
-    import { onMounted, ref } from 'vue';
-    import TheButton from '../atoms/TheButton.vue';
+import { onMounted, ref } from 'vue';
+import TheButton from '../atoms/TheButton.vue';
+import { usePostsStore } from '@/stores/posts';
 
-    const textareaRef = ref(null);
-    const createPostForm = ref(null);
-    onMounted( () => {
-        textareaRef.value.focus();
-    })
+const postsStore = usePostsStore();
+const { addPost } = postsStore;
 
-    const createPost = (event) => {
-        event.preventDefault();
-        if(createPostForm.value.reportValidity()) {
-            // code to create post
-        }
-    };
+const textareaRef = ref(null);
+const createPostForm = ref(null);
+onMounted(() => {
+    textareaRef.value.focus();
+})
+
+const createPostHandler = (event) => {
+    event.preventDefault();
+    if (createPostForm.value.reportValidity()) {
+        addPost(textareaRef.value.value);
+    }
+};
 </script>
 <style scoped>
 form {
