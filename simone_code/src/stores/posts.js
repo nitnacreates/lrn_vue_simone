@@ -28,7 +28,11 @@ export const usePostsStore = defineStore('posts', {
         addPost(postText) {
           const newpost = generatePostStructure(postText);
           this.posts.unshift(newpost);
+          this.toggleInProgress();
         },
+        toggleInProgress() {
+          this.inProgress = !this.inProgress;
+        }
     },
 });
 
