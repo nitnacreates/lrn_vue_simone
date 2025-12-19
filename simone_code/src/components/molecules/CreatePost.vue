@@ -7,7 +7,7 @@
         <TheButton>Create Post</TheButton>
     </form>
 </template>
-<script>
+<script setup>
 import { onMounted, ref } from 'vue';
 import TheButton from '../atoms/TheButton.vue';
 import { usePostsStore } from '@/stores/posts';

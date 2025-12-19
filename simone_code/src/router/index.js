@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import PrivacyView from '../views/PrivacyView.vue'
 import UserPostsView from '@/views/UserPostsView.vue'
 import UserProfileView from '@/views/UserProfileView.vue'
+import ContactView from '@/views/ContactView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,11 @@ const router = createRouter({
       path: '/privacy',
       name: 'privacy',
       component: PrivacyView
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: ContactView
     },
     {
       path: "/user/:userId",
